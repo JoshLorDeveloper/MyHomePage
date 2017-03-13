@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		your home
+	</title>
+	<style>
+  
+
+  .holders{
+    position: fixed;
+    left: 25%;
+    top:25%;
+    width: 100px;
+    height:100px;
+    overflow:auto;
+    resize: none;
+    border:solid;
+    border-radius: 12px;
+    border-color: white;
+    border-width:3px;
+    max-width:none;
+    background-color: white;
+    outline:none;
+    }
+    .holdersWith{
+    position: fixed;
+    left: 25%;
+    top:25%;
+    width: 100px;
+    height:100px;
+    overflow:auto;
+    resize: none;
+    border:solid;
+    border-radius: 12px;
+    border-color: white;
+    border-width:3px;
+    max-width:none;
+    background-color: white;
+    outline:none;
+    }
+    .holdersWith:focus{
+        box-shadow: 0 0 3pt 2pt red;
+  }
+  	.textBoxes{
+    position: relative;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    top:4%;
+    left:4%;
+    word-wrap: break-word;
+    max-width:92%;
+    max-height:96%;
+    min-width:70%;
+    min-height:90%;
+    height:auto;
+    width:auto;
+    border-radius:3px;
+    background-color: transparent;
+    overflow-x: auto;
+    user-drag: none;
+    -webkit-user-drag: none;
+
+	}
+  .imgs{
+    position: relative;
+    bottom:0%;
+    left:0%;
+    width: 99%;
+    height:99%;
+    user-drag: none; 
+user-select: none;
+-moz-user-select: none;
+-webkit-user-drag: none;
+-webkit-user-select: none;
+-ms-user-select: none;
+  }
+  .imgHolders{
+    position: fixed;
+    left: 50%;
+    top:50%;
+    resize: none;
+    overflow:auto;
+    width: 100px;
+    height:100px;
+    max-width:none;
+    background-color: transparent;
+    outline:none;
+  }
+  .imgHoldersWith{
+    position: fixed;
+    left: 50%;
+    top:50%;
+    resize: none;
+    overflow:auto;
+    width: 100px;
+    height:100px;
+    max-width:none;
+    background-color: transparent;
+    outline:none;
+  }
+  .imgHoldersWith:focus{
+        box-shadow: 0 0 3pt 2pt red;
+  }
+	#background{
+		position:fixed;
+		left:0px;
+		top:0px;
+		width:100%;
+		height:100%;
+		background-color: blue;
+	}
+  #modeButton{
+    position:fixed;
+    outline:none;
+    width:62px;
+    height:62px;
+    right:8px;
+    top:15px;
+    border:none;
+    background-color:transparent;
+  }
+  #addButton{
+    position:fixed;
+    outline:none;
+    width:62px;
+    height:56px;
+    right:8px;
+    top:75px;
+    display:none;
+    border:none;
+    background-color:transparent;
+  }
+  #bImage{
+    position:relative;
+    width:100%;
+    height:100%;
+  }
+  #bImage2{
+    position:relative;
+    width:100%;
+    height:100%;
+  }
+  #insImg{
+    position:fixed;
+    top:0px;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    display:none;
+    font-size: 110%;   
+    width: 150px;
+    height: 30px;
+    }
+    #clrB{
+    position:fixed;
+    top:30px;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    display:none;
+    font-size: 110%;   
+    width: 150px;
+    height: 30px;
+    }
+    #incB{
+    left:150px;
+    top:0px;
+    position:fixed;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    display:none;
+    font-size: 110%;   
+    width: 150px;
+    height: 30px;
+    }
+    #decB{
+    left:300px;
+    position:fixed;
+    top:0px;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    display:none;
+    font-size: 110%;   
+    width: 150px;
+    height: 30px; }
+    #insLink{
+    left:450px;
+    position:fixed;
+    top:0px;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    display:none;
+    font-size: 110%;   
+    width: 150px;
+    height: 30px; 
+    }
+    #dClr{
+    left:450px;
+    position:fixed;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    display:none;
+    font-size: 110%;
+    top:0px;  
+    width: 150px;
+    height: 30px;
+    }
+	</style>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $(document).on('keydown', '.editor', function(e){
+  //detect 'tab' key
+  if(e.keyCode == 9){
+    //add tab
+    document.execCommand('insertHTML', false, '&#009');
+    //prevent focusing on next element
+    e.preventDefault()   
+  }
+});
+  $.event.special.tripleclick = {
+
+    setup: function(data, namespaces) {
+        var elem = this, $elem = jQuery(elem);
+        $elem.bind('click', jQuery.event.special.tripleclick.handler);
+    },
+
+    teardown: function(namespaces) {
+        var elem = this, $elem = jQuery(elem);
+        $elem.unbind('click', jQuery.event.special.tripleclick.handler)
+    },
+
+    handler: function(event) {
+        var elem = this, $elem = jQuery(elem), clicks = $elem.data('clicks') || 0, start = $elem.data('startTimeTC') || 0;
+        if ((new Date().getTime() - start)>= 1200) {
+            clicks = 0;
+        }
+        clicks += 1;
+        if(clicks === 1) {
+            start = new Date().getTime();
+        }
+        if ( clicks === 4 ) {
+            clicks = 0;
+
+            // set event type to "tripleclick"
+            event.type = "tripleclick";
+            
+            // let jQuery handle the triggering of "tripleclick" event handlers
+            $elem.trigger('tripleclick');
+
+        }
+        
+        $elem.data('clicks', clicks);
+        $elem.data('startTimeTC', start);
+    }
+    
+};
+
+  </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://cdn.rawgit.com/bgrins/spectrum/master/spectrum.js"></script>
+<link href="https://cdn.rawgit.com/bgrins/spectrum/master/spectrum.css" rel="stylesheet"/>
+<script>
+$(document).ready(function() {
+  
+  $("#clrB").spectrum({
+    color: "blue",
+    showInput: false,
+    showPaletteOnly: true,
+    //togglePaletteOnly: true,
+    hideAfterPaletteSelect:true,
+    showInitial: true,
+    showSelectionPalette: true,
+    maxSelectionSize: 0,
+    localStorageKey: "backPalet",
+    palette: [
+        ["#000","#444","#666","#999","#ccc","#eee","#fff","#00000000"],
+        ["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
+        ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"],
+        ["#ea9999","#f9cb9c","#ffe599","#b6d7a8","#a2c4c9","#9fc5e8","#b4a7d6","#d5a6bd"],
+        ["#e06666","#f6b26b","#ffd966","#93c47d","#76a5af","#6fa8dc","#8e7cc3","#c27ba0"],
+        ["#c00","#e69138","#f1c232","#6aa84f","#45818e","#3d85c6","#674ea7","#a64d79"],
+        ["#900","#b45f06","#bf9000","#38761d","#134f5c","#0b5394","#351c75","#741b47"],
+        ["#600","#783f04","#7f6000","#274e13","#0c343d","#073763","#20124d","#4c1130"]
+    ],
+    change: function(color) {
+      $('#background').css('background-color',color.toRgbString());
+    }
+  });
+  $("#clrB").spectrum("set", getCookie("pColor"));
+  /////////////////////////////////////////////////////////
+  $("#dClr").spectrum({
+    color: "white",
+    showInput: false,
+    showPaletteOnly: true,
+    hideAfterPaletteSelect:true,
+    showInitial: true,
+    showSelectionPalette: true,
+    maxSelectionSize: 0,
+    localStorageKey: "backPalet",
+    palette: [
+        ["#000","#444","#666","#999","#ccc","#eee","#fff","#00000000"],
+        ["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
+        ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"],
+        ["#ea9999","#f9cb9c","#ffe599","#b6d7a8","#a2c4c9","#9fc5e8","#b4a7d6","#d5a6bd"],
+        ["#e06666","#f6b26b","#ffd966","#93c47d","#76a5af","#6fa8dc","#8e7cc3","#c27ba0"],
+        ["#c00","#e69138","#f1c232","#6aa84f","#45818e","#3d85c6","#674ea7","#a64d79"],
+        ["#900","#b45f06","#bf9000","#38761d","#134f5c","#0b5394","#351c75","#741b47"],
+        ["#600","#783f04","#7f6000","#274e13","#0c343d","#073763","#20124d","#4c1130"]
+    ],
+    change: function(color) {
+      var forClrChange = document.getElementById(currentElement.replace("dT","dH"));
+      $(forClrChange).css('background-color',color.toRgbString());
+      $(forClrChange).css('border-color',color.toRgbString());
+      forClrChange.focus();
+    },
+    show: function(color) {
+  $("#dClr").spectrum("set", document.getElementById(currentElement.replace("dT","dH")).style.backgroundColor);}
+  });
+});
+
+</script>
+
+	</head>
+<body ondragover="drag_over(event)" ondrop="drop(event)">
+	<div id = "background">	
+    <button type="button" id = "modeButton" onclick="changeMode()">
+      <img class="resize" id= "bImage" src="http://www.myiconfinder.com/uploads/iconsets/256-256-5948f81b64e21ca7f2fdb97148a03f12-note.png">
+    </button>
+    <button type="button" id = "addButton" onclick="newBox()">
+      <img class="resize" id= "bImage2" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Plus_font_awesome.svg/2000px-Plus_font_awesome.svg.png">
+    </button>
+    <button type="button" id = "insImg" onmouseup="insertImage()">
+    Insert Image    
+    </button>
+    <button type="button" id = "clrB">
+      Background Color
+    </button>
+    <button type="button" id = "dClr">
+      Change Color
+    </button>
+    <button type="button" id = "incB" onmouseup="sizeChange(currentElement,4)">
+      Increase Size
+    </button>
+    <button type="button" id = "decB" onmouseup="sizeChange(currentElement,-4)">
+      Decrease Size
+    </button>
+    <button type="button" id = "insLink" onmouseup="insertLink()">
+      Insert Link
+    </button>
+    
+</div>
+	<script>
+  var objectSuper = [];
+  var textSuper = [];
+  var imgSuper = [];
+  var imgHoldSuper = [];
+  // IMPORTANT REMEMBER TO CHECK IF COOKIE EXISTS SO THAT FIRST TIME USER WORKS
+  if(getCookie("dObjects") != null){
+  objectSuper = getCookie("dObjects").split(",");
+  textSuper = getCookie("dText").split(",");
+}
+  if(getCookie("imgHold") != null){
+  imgSuper = getCookie("nImgs").split(",");
+  imgHoldSuper = getCookie("imgHold").split(",");
+}
+  if(objectSuper == ""){
+  objectSuper = [];
+  textSuper = [];
+}
+if(imgSuper == ""){
+  imgSuper = [];
+  imgHoldSuper = [];
+}
+
+  pageRestore(textSuper.length);
+  pageLoad();
+  var currentElement;
+  var from;
+  //mode change
+  var mode = 0;
+ function changeMode(){
+  mode  = ((-mode) +1);
+  if(mode == 0){
+        saveCord();
+      document.getElementById("bImage").src = "http://www.myiconfinder.com/uploads/iconsets/256-256-5948f81b64e21ca7f2fdb97148a03f12-note.png";
+      document.getElementById("addButton").style.display = "none";
+      document.getElementById("insImg").style.display = "none";
+      document.getElementById("clrB").style.display = "none";
+   /*   var cols =     document.getElementsByClassName('xbuttons');
+      for(i=0; i<cols.length; i++) {
+      cols[i].style.display = "none";
+      }*/
+
+    for(i=0; i<objectSuper.length; i++){
+    document.getElementById(objectSuper[i]).className = "holders";
+    document.getElementById(objectSuper[i]).setAttribute('draggable', false);
+    document.getElementById(objectSuper[i]).style.resize = "none";
+    document.getElementById(textSuper[i]).contentEditable = false;
+  }
+   for(i=0; i<imgSuper.length; i++){
+    document.getElementById(imgHoldSuper[i]).className = "imgHolders";
+    document.getElementById(imgHoldSuper[i]).setAttribute('draggable', false);
+    document.getElementById(imgHoldSuper[i]).style.resize = "none";
+    document.getElementById(imgHoldSuper[i]).style.backgroundColor = "transparent";
+  }
+  }
+  if(mode == 1){
+    document.getElementById("bImage").src = "https://cdn3.iconfinder.com/data/icons/education/512/Book-512.png";
+    document.getElementById("addButton").style.display = "block";
+    document.getElementById("insImg").style.display = "block";
+    document.getElementById("clrB").style.display = "block";
+    /*  var cols =     document.getElementsByClassName('xbuttons');
+      for(i=0; i<cols.length; i++) {
+      cols[i].style.display = "block";
+      }
+*/  
+  for(i=0; i<objectSuper.length; i++){
+  document.getElementById(objectSuper[i]).className = "holdersWith";
+    document.getElementById(objectSuper[i]).setAttribute('draggable', true);
+    document.getElementById(objectSuper[i]).style.resize = "both";
+    document.getElementById(textSuper[i]).contentEditable = true;
+  }
+  for(i=0; i<imgSuper.length; i++){
+    document.getElementById(imgHoldSuper[i]).className = "imgHoldersWith";
+    document.getElementById(imgHoldSuper[i]).setAttribute('draggable', true);
+    document.getElementById(imgHoldSuper[i]).style.resize = "both";
+    document.getElementById(imgHoldSuper[i]).style.backgroundColor = "white";
+  }
+  }
+ }
+ function reloadMode(){
+  if(mode == 0){
+      document.getElementById("addButton").style.display = "none";
+    
+    for(i=0; i<objectSuper.length; i++){
+      document.getElementById(objectSuper[i]).className = "holders";
+    document.getElementById(objectSuper[i]).setAttribute('draggable', false);
+    document.getElementById(objectSuper[i]).style.resize = "none";
+    document.getElementById(textSuper[i]).contentEditable = false;
+  }
+   for(i=0; i<imgSuper.length; i++){
+    document.getElementById(imgHoldSuper[i]).className = "imgHolders";
+    document.getElementById(imgHoldSuper[i]).setAttribute('draggable', false);
+    document.getElementById(imgHoldSuper[i]).style.resize = "none";
+    document.getElementById(imgHoldSuper[i]).style.backgroundColor = "transparent";
+  }
+  }
+  if(mode == 1){
+    for(i=0; i<objectSuper.length; i++){
+    document.getElementById(objectSuper[i]).className = "holdersWith";
+    document.getElementById(objectSuper[i]).setAttribute('draggable', true);
+    document.getElementById(objectSuper[i]).style.resize = "both";
+    document.getElementById(textSuper[i]).contentEditable = true;
+  }
+   for(i=0; i<imgSuper.length; i++){
+    document.getElementById(imgHoldSuper[i]).className = "imgHoldersWith";
+    document.getElementById(imgHoldSuper[i]).setAttribute('draggable', true);
+    document.getElementById(imgHoldSuper[i]).style.resize = "both";
+    document.getElementById(imgHoldSuper[i]).style.backgroundColor = "white";
+  }
+  }
+     }
+//mode change end
+//add element
+  function newBox(){
+    //creates objects
+    var dHolder = document.createElement('div');
+    var dText = document.createElement('div');
+
+    dHolder.className = 'holdersWith';
+    dHolder.tabIndex = "-1";
+    dHolder.id = "dH" + objectSuper.length;
+    dHolder.style.width = "100px";
+    dHolder.style.height = "100px";
+    dHolder.style.left = "200px";
+    dHolder.style.top = "200px";
+    dHolder.ondragstart = function() {drag_start(event)};
+    objectSuper.push(dHolder.id);
+    $(dText).bind("tripleclick", function() {
+    doubleClicked();   
+    });
+    //dText.ondblclick = function() {doubleClicked()};
+    dText.className = 'textBoxes';
+    dText.id = "dT" + textSuper.length;
+    dText.contentEditable = true;
+    dText.setAttribute('draggable', 'false');
+    dText.style.fontSize = "22px";
+    textSuper.push(dText.id); 
+
+    document.getElementById("background").appendChild(dHolder);
+    dHolder.appendChild(dText);
+    dText.focus();
+  }
+//add element end
+//restore page
+  function pageRestore(arrayLength){
+    objectSuper = [];
+    textSuper = [];
+    for(i=0; i<arrayLength; i++){
+     var dHolder = document.createElement('div');
+    var dText = document.createElement('div');
+
+    dHolder.className = 'holders';
+    dHolder.id = "dH" + String(i);
+    dHolder.tabIndex = "-1";
+    objectSuper.push(dHolder.id);
+    dHolder.style.width = "100px";
+    dHolder.style.height = "100px";
+    dHolder.style.left = "200px";
+    dHolder.style.top = "200px";
+    dHolder.ondragstart = function() {drag_start(event)};
+    $(dText).bind("tripleclick", function() {
+    doubleClicked();    
+    });
+    //dText.ondblclick = function() {doubleClicked()};
+    dText.className = 'textBoxes';
+    dText.id = "dT" + String(i);
+    dText.setAttribute('draggable', 'false');
+    dText.contentEditable = false;
+    textSuper.push(dText.id); 
+
+    document.getElementById("background").appendChild(dHolder);
+    dHolder.appendChild(dText); 
+  }
+  var imgArrayLength = imgHoldSuper.length;
+  imgSuper = [];
+  imgHoldSuper = [];
+    for(i=0; i<imgArrayLength; i++){
+    var nImg = document.createElement('img');
+    nImg.className = "imgs";
+    nImg.class = "resize";
+    nImg.id = "dImg" + String(i);
+    $(nImg).bind("tripleclick", function() {
+    doubleClicked();    
+    });
+    //nImg.ondblclick = function() {doubleClicked()};
+    imgSuper.push(nImg.id);
+    var imgHolder = document.createElement('div');
+    imgHolder.className = "imgHolders";
+    imgHolder.id = "imgHold" + String(i);
+    imgHolder.tabIndex = "-1";
+    imgHolder.style.width = "100px";
+    imgHolder.style.height = "100px";
+    imgHolder.style.left = "200px";
+    imgHolder.style.top = "200px";
+    imgHoldSuper.push(imgHolder.id);
+    imgHolder.ondragstart = function() {drag_start(event)};
+    document.getElementById("background").appendChild(imgHolder);
+    imgHolder.appendChild(nImg);
+}
+}
+//restore page end
+//storage
+  //get storage
+
+	function pageLoad(){
+    mode = 0;
+    var savdColor = getCookie("pColor");
+    if(savdColor != null && savdColor != ""&& savdColor != " "){
+      document.getElementById("background").style.backgroundColor = savdColor;
+    }
+    for(i=0; i<textSuper.length; i++){
+		document.getElementById(textSuper[i]).innerHTML= getCookie("pbox" + String(i));
+    document.getElementById(textSuper[i]).style.fontSize=getCookie("pfSize" + String(i));
+  }      for(i=0; i<objectSuper.length; i++){
+    document.getElementById(objectSuper[i]).style.backgroundColor = getCookie("dColor" + String(i));
+    document.getElementById(objectSuper[i]).style.borderColor = getCookie("dColor" + String(i));
+		document.getElementById(objectSuper[i]).style.left = getCookie("pX" + String(i));
+		document.getElementById(objectSuper[i]).style.top = getCookie("pY" + String(i));
+    document.getElementById(objectSuper[i]).style.width = getCookie("pWidth" + String(i));
+    document.getElementById(objectSuper[i]).style.height = getCookie("pHeight" + String(i));
+  }
+  for(i=0; i<imgSuper.length; i++){
+    document.getElementById(imgHoldSuper[i]).style.left = getCookie("imgX" + String(i));
+    document.getElementById(imgHoldSuper[i]).style.top = getCookie("imgY" + String(i));
+    document.getElementById(imgHoldSuper[i]).style.width = getCookie("imgWidth" + String(i));
+    document.getElementById(imgHoldSuper[i]).style.height = getCookie("imgHeight" + String(i));
+    document.getElementById(imgSuper[i]).src = getCookie("imgSrc" + String(i));
+  }
+	}
+  //save storage
+  setInterval(function(){saveImg()}, 400);
+  setInterval(function(){saveCord()}, 400);
+  setInterval(function(){saveText()}, 200);
+
+function saveImg(){
+  for(i=0; i<imgSuper.length; i++){
+  setCookie("imgX" + String(i),document.getElementById(imgHoldSuper[i]).style.left);
+  setCookie("imgY" + String(i),document.getElementById(imgHoldSuper[i]).style.top);
+  setCookie("imgWidth" + String(i),document.getElementById(imgHoldSuper[i]).style.width);
+  setCookie("imgHeight" + String(i),document.getElementById(imgHoldSuper[i]).style.height);
+  setCookie("imgSrc" + String(i),document.getElementById(imgSuper[i]).src);
+}
+}
+function saveCord(){
+  setCookie("pColor", document.getElementById("background").style.backgroundColor);
+  for(i=0; i<objectSuper.length; i++){
+  setCookie("dColor" + String(i),document.getElementById(objectSuper[i]).style.backgroundColor);
+  setCookie("pX" + String(i),document.getElementById(objectSuper[i]).style.left);
+  setCookie("pY" + String(i),document.getElementById(objectSuper[i]).style.top);
+  setCookie("pWidth" + String(i),document.getElementById(objectSuper[i]).style.width);
+  setCookie("pHeight" + String(i),document.getElementById(objectSuper[i]).style.height);
+}
+}
+function saveText(){
+  reloadMode();
+    setCookie("dObjects", objectSuper.toString());
+    setCookie("dText", textSuper.toString());
+    setCookie("nImgs", imgSuper.toString());
+    setCookie("imgHold", imgHoldSuper.toString());
+    for(i=0; i<textSuper.length; i++){
+    setCookie("pbox" + String(i),document.getElementById(textSuper[i]).innerHTML);
+    setCookie("pfSize" + String(i),document.getElementById(textSuper[i]).style.fontSize);
+  }
+  if (mode==1){
+  var find = false; 
+  for (i = 0; i < objectSuper.length && !find; i++) {
+  if (textSuper[i] === document.activeElement.id) {
+    find = true;
+  }
+}
+if (find == true){
+    document.getElementById("incB").style.display = "block";
+    document.getElementById("decB").style.display = "block";
+    document.getElementById("insLink").style.display = "block";
+    document.getElementById("dClr").style.display = "none";
+    currentElement = document.activeElement.id.replace("dH","dT");
+    from = "chi";
+}else{
+  if(document.activeElement.id == "incB"||document.activeElement.id == "decB"||document.activeElement.id == "insLink"){
+    }else{
+      document.getElementById("incB").style.display = "none";
+      document.getElementById("decB").style.display = "none";
+      document.getElementById("insLink").style.display = "none";
+      document.getElementById("dClr").style.display = "none";
+      var finde = false; 
+  for (i = 0; i < objectSuper.length && !finde; i++) {
+  if (objectSuper[i] === document.activeElement.id) {
+    finde = true;
+  }
+}
+if (finde == true || document.activeElement.id == "dClr"){
+    document.getElementById("incB").style.display = "block";
+    document.getElementById("decB").style.display = "block";
+    document.getElementById("dClr").style.display = "block";
+    if(document.activeElement.id != "dClr"){
+    currentElement = document.activeElement.id.replace("dH","dT");
+  }
+    from = "par";
+}else{
+  if(document.activeElement.id == "incB"||document.activeElement.id == "decB"){
+      
+    }else{
+      document.getElementById("incB").style.display = "none";
+      document.getElementById("decB").style.display = "none";
+    }
+}
+    }
+}
+}else{
+  document.getElementById("incB").style.display = "none";
+  document.getElementById("decB").style.display = "none";
+  document.getElementById("insLink").style.display = "none";
+  document.getElementById("dClr").style.display = "none";
+}
+}
+
+function setCookie(cname, cvalue) {
+    localStorage.setItem(cname,cvalue);
+}
+function getCookie(cname) {
+	return(localStorage.getItem( cname ));
+}
+//end storage
+//Delete Boxes
+  function deleteParent(selected){
+    if(mode == 1){
+    var found = false;
+for (i = 0; i < objectSuper.length && !found; i++) {
+  if (objectSuper[i] === selected.id) {
+    found = true;
+  }
+}
+var found2 = false;
+for (i = 0; i < imgHoldSuper.length && !found2; i++) {
+  if (imgHoldSuper[i] === selected.id) {
+    found2 = true;
+  }
+}
+
+if(found == true){
+  var toDelete = objectSuper.indexOf(selected.id);
+  objectSuper.splice(toDelete, 1);
+  textSuper.splice(toDelete, 1);
+  selected.parentElement.removeChild(selected);
+}
+if(found2 == true){
+  var toDelete = imgHoldSuper.indexOf(selected.id);
+  imgSuper.splice(toDelete, 1);
+  imgHoldSuper.splice(toDelete, 1);
+  selected.parentElement.removeChild(selected);
+}
+}
+}
+//Delete Boexes End
+//Style changes
+var els = document.body.children;
+for(var i=0; i<els.length; ++i) {
+    els[i].addEventListener('focus', focus, true);
+    els[i].addEventListener('blur', blur, true);
+}
+function focus() {
+    this.classList.add('focus');
+}
+function blur() {
+    this.classList.remove('focus');
+}
+function doubleClicked(){
+    var target = event.target || event.srcElement;
+    var curId = document.getElementById(target.parentElement.id);
+    curId.focus();
+}
+
+document.addEventListener('keydown', function (e) {
+  if(e.keyCode == 8){
+    deleteParent(document.activeElement);
+  }
+}, false);
+
+function sizeChange(element,step)
+{
+  step = parseInt(step,10);
+  var el = document.getElementById(element);
+  var curFont = parseInt(el.style.fontSize,10);
+  el.style.fontSize = (curFont+step) + 'px';
+if (from == "par"){
+  el.parentElement.focus();
+}else{
+  el.focus();
+}
+}
+function insertLink(){
+  var link = window.prompt("please enter link","link goes here");
+  if (link != null) {
+    insertHTMLAtCursor("<a href="+link+">"+link+"</a>");
+}
+}
+function insertImage(){
+  var link = window.prompt("please enter image source","link goes here");
+  if (link != null) {
+    var nImg = document.createElement('img');
+    var imgHolder = document.createElement('div');
+    nImg.className = "imgs";
+    nImg.class = "resize";
+    nImg.src = link;
+    nImg.id = "dImg" + imgSuper.length;
+    $(nImg).bind("tripleclick", function() {
+    doubleClicked();    
+    });
+    //nImg.ondblclick = function() {doubleClicked()};    
+    imgSuper.push(nImg.id);
+    var imgHolder = document.createElement('div');
+    imgHolder.className = "imgHoldersWith";
+    imgHolder.id = "imgHold" + imgSuper.length;
+    imgHolder.tabIndex = "-1";
+    imgHoldSuper.push(imgHolder.id);
+    imgHolder.style.width = "100px";
+    imgHolder.style.height = "100px";
+    imgHolder.style.left = "200px";
+    imgHolder.style.top = "200px";
+    //les.push(imgHolder);
+    imgHolder.ondragstart = function() {drag_start(event)};
+    document.getElementById("background").appendChild(imgHolder);
+    imgHolder.appendChild(nImg);
+}
+}
+///////////////////////////////////////////////////////////////////////////////////
+
+
+//style changes end
+//drag function
+var find = false;
+function drag_start(event) 
+    {
+  find = false; 
+  for (i = 0; i < objectSuper.length && !find; i++) {
+  if (objectSuper[i] === event.target.id) {
+    find = true;
+  }
+}
+for (i = 0; i < imgHoldSuper.length && !find; i++) {
+  if (imgHoldSuper[i] === event.target.id || imgSuper[i] === event.target.id&& mode == 1&& !find) {
+    find = true;
+    //event.target.id = imgHoldSuper[i];
+  }
+
+}
+
+
+if (find == true){
+    var style = window.getComputedStyle(event.target, null);
+    var str = (parseInt(style.getPropertyValue("left")) - event.clientX) + ',' + (parseInt(style.getPropertyValue("top")) - event.clientY)+ ',' + event.target.id;
+    event.dataTransfer.setData("Text",str);
+    } 
+  }
+    function drop(event) 
+    {
+      if(find == true){
+    var offset = event.dataTransfer.getData("Text").split(',');
+    var dm = document.getElementById(offset[2]);
+    dm.style.left = (event.clientX + parseInt(offset[0],10)) + 'px';
+    dm.style.top = (event.clientY + parseInt(offset[1],10)) + 'px';
+    event.preventDefault();
+    return false;
+  }
+ }
+    function drag_over(event)
+    {
+    event.preventDefault();  
+    return false;
+    }   
+//drag function end
+//keyboard shortcuts
+document.onkeydown = function (e) {
+    e = e || window.event;
+    finder = false; 
+  for (i = 0; i < textSuper.length && !finder; i++) {
+    if (textSuper[i] === document.activeElement.id) {
+    finder = true;
+    }
+  }
+  if(finder==true){
+/*  var map = {}; 
+    onkeydown = onkeyup = function(e){
+    e = e || event; 
+    map[e.keyCode] = e.type == 'keydown';
+    }*/
+    if(e.keyCode== 56&&e.metaKey){
+      insertHTMLAtCursor("&ensp;•&ensp;");
+      //document.getElementById("dT0").innerHTML = "a&emsp;b";
+    }  
+  }
+};
+function insertHTMLAtCursor(html) {
+    var sel, range;
+    if (window.getSelection) {
+        // IE9 and non-IE
+        sel = window.getSelection();
+        if (sel.getRangeAt && sel.rangeCount) {
+            range = sel.getRangeAt(0);
+            range.deleteContents();
+
+            // Range.createContextualFragment() would be useful here but is
+            // only relatively recently standardized and is not supported in
+            // some browsers (IE9, for one)
+            var el = document.createElement("div");
+            el.innerHTML = html;
+            var frag = document.createDocumentFragment(), node, lastNode;
+            while ( (node = el.firstChild) ) {
+                lastNode = frag.appendChild(node);
+            }
+            range.insertNode(frag);
+
+            // Preserve the selection
+            if (lastNode) {
+                range = range.cloneRange();
+                range.setStartAfter(lastNode);
+                range.collapse(true);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        }
+    } else if (document.selection && document.selection.type != "Control") {
+        // IE < 9
+        document.selection.createRange().pasteHTML(html);
+    }
+}
+//keyboard shotcuts end
+//color changes start
+//color changes end
+//resizable function
+function resizableStart(e){
+    this.originalW = this.clientWidth;
+    this.originalH = this.clientHeight;
+    this.onmousemove = resizableCheck;
+    this.onmouseup = this.onmouseout = resizableEnd;
+}
+function resizableCheck(e){
+if((mode==1&&e.buttons == 1&& e.clientX > (parseInt(this.style.width)+parseInt(this.style.left))*0.95&& e.clientY > (parseInt(this.style.height)+parseInt(this.style.top))*0.95)) {
+        this.originalX = e.clientX;
+        this.originalY = e.clientY;
+        this.onmousemove = resizableMove;
+}
+}
+function resizableMove(e){
+    var newW = this.originalW + e.clientX - this.originalX,
+        newH = this.originalH + e.clientY - this.originalY;
+    if(newW < this.originalW){
+        this.style.width = newW + 'px';
+    }
+    if(newH < this.originalH){
+        this.style.height = newH + 'px';
+  }
+}
+function resizableEnd(){
+    this.onmousemove = this.onmouseout = this.onmouseup = null;
+}
+  setInterval(function(){dragSetUp()}, 400);
+  function dragSetUp(){
+var les = document.getElementsByClassName('imgHolders');
+for(var i=0, len=les.length; i<len; ++i){
+    les[i].onmouseover = resizableStart;
+}
+var els = document.getElementsByClassName('holders');
+for(var i=0, len=els.length; i<len; ++i){
+    els[i].onmouseover = resizableStart;
+}
+}
+
+//resizeable function end
+	</script>
+</body>
+</html>
